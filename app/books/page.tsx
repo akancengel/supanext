@@ -2,10 +2,17 @@ import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { getBooks } from "@/lib/books";
 
-export const dynamic = "force-dynamic"; // her istekte güncel veriyi getirir
+export const dynamic = "force-dynamic"; // her istekte güncel veriyi getir
+
+interface Book {
+    id: string;
+    title: string;
+    description?: string;
+    user_id?: string;
+}
 
 export default async function BooksPage() {
-    const books = await getBooks();
+    const books: Book[] = await getBooks();
 
     return (
         <div>
@@ -17,7 +24,7 @@ export default async function BooksPage() {
                     <p>No books found.</p>
                 ) : (
                     <ul className="space-y-3">
-                        {books.map((book: any) => (
+                        {books.map((book) => (
                             <li key={book.id} className="rounded-lg shadow-sm">
                                 <h2 className="font-semibold">{book.title}</h2>
                                 {book.description && (

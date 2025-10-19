@@ -1,10 +1,16 @@
-import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { getUserBooks } from "@/lib/userBooks";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
 export const dynamic = "force-dynamic"; // her istekte güncel veriyi getir
+
+interface Book {
+    id: string;
+    title: string;
+    description?: string;
+    user_id?: string;
+}
 
 export default async function DashboardBooksPage() {
     const supabase = createClient();
@@ -15,10 +21,18 @@ export default async function DashboardBooksPage() {
     } = await (await supabase).auth.getUser();
 
     if (!user) {
-        return <p>Please sign in to see your books.</p>;
+        return (
+            <div>
+                <Header />
+                <div className="p-6">
+                    <p>Please sign in to see your books.</p>
+                </div>
+                <Footer />
+            </div>
+        );
     }
 
-    const books = await getUserBooks(user.id);
+    const books: Book[] = await getUserBooks(user.id);
 
     return (
         <div>
@@ -30,7 +44,7 @@ export default async function DashboardBooksPage() {
                     <p>You have no books yet.</p>
                 ) : (
                     <ul className="space-y-3">
-                        {books.map((book: any) => (
+                        {books.map((book) => (
                             <li key={book.id} className="rounded-lg shadow-sm">
                                 <h2 className="font-semibold">{book.title}</h2>
                                 {book.description && (
