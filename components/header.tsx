@@ -1,9 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 
-import { hasEnvVars } from "@/lib/utils";
 import { AuthButton } from './auth-button'
-
 
 import { createClient } from "@/lib/supabase/server";
 
